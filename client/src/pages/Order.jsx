@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../components/navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import './Order.css'
+import { apiFetch } from '../utils/apiClient'
 
 // 포트원(PortOne)에서 발급받은 클라이언트 식별 코드
 const PORTONE_CLIENT_CODE = 'imp34117525'
@@ -358,7 +359,7 @@ function Order() {
               Authorization: `Bearer ${token}`
             }
 
-            const orderResponse = await fetch('/api/orders', {
+            const orderResponse = await apiFetch('orders', {
               method: 'POST',
               headers,
               body: JSON.stringify(payload)

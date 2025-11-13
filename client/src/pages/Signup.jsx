@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import './Signup.css'
+import { apiFetch } from '../utils/apiClient'
 
 function Signup() {
   const navigate = useNavigate();
@@ -72,16 +72,28 @@ function Signup() {
     }
 
     try {
-      const response = await axios.post('/api/users', {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        user_type: 'customer',
-        address: formData.address || undefined
+      const response = await apiFetch('users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          user_type: 'customer',
+          address: formData.address || undefined
+        })
       });
 
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || '회원가입 중 오류가 발생했습니다.');
+      }
+
       alert('회원가입이 완료되었습니다!');
-      console.log('User created:', response.data);
+      console.log('User created:', data);
       
       // Reset form
       setFormData({
@@ -102,11 +114,7 @@ function Signup() {
       navigate('/');
     } catch (error) {
       console.error('Signup error:', error);
-      if (error.response && error.response.data.message) {
-        alert(error.response.data.message);
-      } else {
-        alert('회원가입 중 오류가 발생했습니다.');
-      }
+      alert(error.message || '회원가입 중 오류가 발생했습니다.');
     }
   };
 

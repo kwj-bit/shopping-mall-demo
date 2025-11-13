@@ -4,6 +4,7 @@ import Navbar from '../components/navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import './Home.css'
 import { FALLBACK_PRODUCTS } from '../data/fallbackProducts'
+import { apiFetch } from '../utils/apiClient'
 
 function Home() {
   const [userName, setUserName] = useState('')
@@ -21,7 +22,7 @@ function Home() {
           return
         }
 
-        const res = await fetch('/api/auth/me', {
+        const res = await apiFetch('auth/me', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -44,7 +45,7 @@ function Home() {
       try {
         setLoadingProducts(true)
         setProductError('')
-        const response = await fetch('/api/products?page=1&limit=12')
+        const response = await apiFetch('products?page=1&limit=12')
         const data = await response.json()
         if (!response.ok || !data?.success) {
           throw new Error(data?.message || '상품 정보를 불러오지 못했습니다.')

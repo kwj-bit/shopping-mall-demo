@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import './Cart.css'
+import { apiFetch } from '../utils/apiClient'
 
 function Cart() {
   const navigate = useNavigate()
@@ -82,11 +83,11 @@ function Cart() {
     setError('')
     try {
       const headers = { Authorization: `Bearer ${authToken}` }
-      let response = await fetch(`/api/cart/${userId}`, { headers })
+      let response = await apiFetch(`cart/${userId}`, { headers })
       let payload = await response.json().catch(() => ({}))
 
       if (response.status === 404) {
-        response = await fetch(`/api/cart/${userId}`, {
+        response = await apiFetch(`cart/${userId}`, {
           method: 'POST',
           headers: { ...headers, 'Content-Type': 'application/json' }
         })
@@ -128,7 +129,7 @@ function Cart() {
       }
 
       try {
-        const res = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${storedToken}` } })
+        const res = await apiFetch('auth/me', { headers: { Authorization: `Bearer ${storedToken}` } })
         const data = await res.json()
 
         if (!res.ok || !data?.success) {
@@ -211,7 +212,7 @@ function Cart() {
     setUpdatingItemId(itemId)
     setError('')
     try {
-      const res = await fetch(`/api/cart/${currentUser._id}/items/${itemId}`, {
+      const res = await apiFetch(`cart/${currentUser._id}/items/${itemId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -238,7 +239,7 @@ function Cart() {
     setUpdatingItemId(itemId)
     setError('')
     try {
-      const res = await fetch(`/api/cart/${currentUser._id}/items/${itemId}`, {
+      const res = await apiFetch(`cart/${currentUser._id}/items/${itemId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       })

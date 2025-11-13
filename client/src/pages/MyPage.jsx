@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../components/navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import './MyPage.css'
+import { apiFetch } from '../utils/apiClient'
 
 const NAV_ITEMS = [
   { id: 'orders', label: '주문내역' },
@@ -75,7 +76,7 @@ function MyPage() {
 
       try {
         const headers = { Authorization: `Bearer ${token}` }
-        const meResponse = await fetch('/api/auth/me', { headers })
+        const meResponse = await apiFetch('auth/me', { headers })
         const meJson = await meResponse.json().catch(() => ({}))
         if (!meResponse.ok || !meJson?.success) {
           clearToken()
@@ -91,7 +92,7 @@ function MyPage() {
         }
 
         try {
-          const orderResponse = await fetch('/api/orders?page=1&limit=20', { headers })
+          const orderResponse = await apiFetch('orders?page=1&limit=20', { headers })
           const orderJson = await orderResponse.json().catch(() => ({}))
 
           if (orderResponse.ok && orderJson?.success && Array.isArray(orderJson.data)) {

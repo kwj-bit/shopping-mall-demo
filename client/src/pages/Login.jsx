@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { apiFetch } from '../utils/apiClient'
 
 function Login() {
   const navigate = useNavigate()
@@ -15,7 +16,7 @@ function Login() {
       try {
         const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token')
         if (!token) return
-        const res = await fetch('/api/auth/me', {
+        const res = await apiFetch('auth/me', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
         const data = await res.json()
@@ -34,7 +35,7 @@ function Login() {
     setError('')
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await apiFetch('auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

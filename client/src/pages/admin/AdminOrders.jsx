@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { apiFetch } from '../../utils/apiClient'
 
 const NAV_BUTTON_STYLE = {
   border: '1px solid #d7dbe5',
@@ -50,7 +51,7 @@ function AdminOrders() {
 
       try {
         const headers = { Authorization: `Bearer ${storedToken}` }
-        const meResponse = await fetch('/api/auth/me', { headers })
+        const meResponse = await apiFetch('auth/me', { headers })
         const meJson = await meResponse.json().catch(() => ({}))
 
         if (!meResponse.ok || !meJson?.success || meJson.data?.user_type !== 'admin') {
@@ -60,7 +61,7 @@ function AdminOrders() {
 
         setAuthToken(storedToken)
 
-        const orderResponse = await fetch('/api/orders?limit=100', { headers })
+        const orderResponse = await apiFetch('orders?limit=100', { headers })
         const orderJson = await orderResponse.json().catch(() => ({}))
 
         if (!orderResponse.ok || !orderJson?.success) {
@@ -151,7 +152,7 @@ function AdminOrders() {
     setStatusUpdatingId(order._id)
     setFeedback('')
     try {
-      const response = await fetch(`/api/orders/${order._id}`, {
+      const response = await apiFetch(`orders/${order._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

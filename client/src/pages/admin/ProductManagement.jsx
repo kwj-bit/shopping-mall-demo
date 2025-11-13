@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import ProductRegistrationForm from './ProductRegistrationForm'
+import { apiFetch } from '../../utils/apiClient'
 
 function ProductManagement() {
   const location = useLocation()
@@ -22,7 +23,7 @@ function ProductManagement() {
     try {
       setLoading(true)
       setError('')
-      const response = await fetch(`/api/products?page=${targetPage}&limit=${PAGE_SIZE}`)
+      const response = await apiFetch(`products?page=${targetPage}&limit=${PAGE_SIZE}`)
       const data = await response.json()
 
       if (!response.ok || !data?.success) {
@@ -66,7 +67,7 @@ function ProductManagement() {
     if (!confirmed) return
     try {
       setMutationPending(true)
-      const response = await fetch(`/api/products/${productId}`, {
+      const response = await apiFetch(`products/${productId}`, {
         method: 'DELETE'
       })
       const data = await response.json()

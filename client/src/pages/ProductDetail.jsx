@@ -4,6 +4,7 @@ import Navbar from '../components/navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import './ProductDetail.css'
 import { findFallbackProduct } from '../data/fallbackProducts'
+import { apiFetch } from '../utils/apiClient'
 
 function ProductDetail() {
   const { id } = useParams()
@@ -31,7 +32,7 @@ function ProductDetail() {
       setLoading(true)
       setError('')
       try {
-        const response = await fetch(`/api/products/${id}`)
+        const response = await apiFetch(`products/${id}`)
         if (!response.ok) {
           throw new Error('상품 정보를 불러오지 못했습니다.')
         }
@@ -86,7 +87,7 @@ function ProductDetail() {
 
     async function fetchMe() {
       try {
-        const res = await fetch('/api/auth/me', {
+        const res = await apiFetch('auth/me', {
           headers: { Authorization: `Bearer ${token}` }
         })
         const data = await res.json()
@@ -163,7 +164,7 @@ function ProductDetail() {
     if (currentUser && token) return currentUser
     if (!token) return null
     try {
-      const res = await fetch('/api/auth/me', {
+      const res = await apiFetch('auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       })
       const data = await res.json()
@@ -210,7 +211,7 @@ function ProductDetail() {
         payload.price = product.price
       }
 
-      const res = await fetch(`/api/cart/${user._id}/items`, {
+      const res = await apiFetch(`cart/${user._id}/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

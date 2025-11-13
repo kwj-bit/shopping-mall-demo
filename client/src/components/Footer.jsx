@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { apiFetch } from '../utils/apiClient'
 
 function Footer() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -17,7 +18,7 @@ function Footer() {
         }
         const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token')
         if (!token) return
-        const res = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
+        const res = await apiFetch('auth/me', { headers: { Authorization: `Bearer ${token}` } })
         const data = await res.json()
         if (res.ok && data?.success && data?.data?.user_type === 'admin') setIsAdmin(true)
       } catch {

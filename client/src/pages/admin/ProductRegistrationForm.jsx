@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { apiFetch } from '../../utils/apiClient'
 
 const INITIAL_FORM = {
   productId: '',
@@ -97,10 +98,10 @@ function ProductRegistrationForm({ onSuccess, onCancel, product, styles = {} }) 
         throw new Error('가격은 숫자로 입력하세요.')
       }
 
-      const endpoint = product ? `/api/products/${product._id || product.product_id}` : '/api/products'
+      const endpoint = product ? `products/${product._id || product.product_id}` : 'products'
       const method = product ? 'PUT' : 'POST'
 
-      const response = await fetch(endpoint, {
+      const response = await apiFetch(endpoint, {
         method,
         headers: {
           'Content-Type': 'application/json'

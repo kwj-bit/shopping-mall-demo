@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
+import { apiFetch } from '../utils/apiClient'
 
 function Navbar() {
   const navigate = useNavigate()
@@ -31,7 +32,7 @@ function Navbar() {
 
     async function fetchCart(userId, token) {
       try {
-        const res = await fetch(`/api/cart/${userId}`, {
+        const res = await apiFetch(`cart/${userId}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (res.status === 404) {
@@ -59,7 +60,7 @@ function Navbar() {
           }
           return
         }
-        const res = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
+        const res = await apiFetch('auth/me', { headers: { Authorization: `Bearer ${token}` } })
         const data = await res.json()
         if (!mounted) return
 
